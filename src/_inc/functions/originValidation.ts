@@ -17,31 +17,31 @@
  * List of allowed origins (domains) from which POST requests can be accepted.
  * This is used both in the frontend and backend for security checks.
  */
-export const ALLOWED_ORIGINS = [
-  'http://localhost:3000',
-  'https://pexeso-next.netlify.app',
-] as const;
+// export const ALLOWED_ORIGINS = [
+//   'http://localhost:3000',
+//   'https://pexeso-next.netlify.app',
+// ] as const;
 
-export type AllowedOrigin = (typeof ALLOWED_ORIGINS)[number];
+// export type AllowedOrigin = (typeof ALLOWED_ORIGINS)[number];
 
-/**
- * Frontend origin verification.
- * Checks whether the current browser origin is in the allowed list.
- *
- * @returns True if the origin is allowed, otherwise false.
- */
-export const verifyClientOrigin = (): boolean => {
-  if (typeof window === 'undefined') return true; // Allow during SSR (Server-Side Rendering)
+// /**
+//  * Frontend origin verification.
+//  * Checks whether the current browser origin is in the allowed list.
+//  *
+//  * @returns True if the origin is allowed, otherwise false.
+//  */
+// export const verifyClientOrigin = (): boolean => {
+//   if (typeof window === 'undefined') return true; // Allow during SSR (Server-Side Rendering)
 
-  const currentOrigin = window.location.origin;
-  const isValid = ALLOWED_ORIGINS.includes(currentOrigin as AllowedOrigin);
+//   const currentOrigin = window.location.origin;
+//   const isValid = ALLOWED_ORIGINS.includes(currentOrigin as AllowedOrigin);
 
-  if (!isValid) {
-    console.error(`Invalid origin: ${currentOrigin}`);
-  }
+//   if (!isValid) {
+//     console.error(`Invalid origin: ${currentOrigin}`);
+//   }
 
-  return isValid;
-};
+//   return isValid;
+// };
 
 /*--------------------------------------------------------------------------*/
 

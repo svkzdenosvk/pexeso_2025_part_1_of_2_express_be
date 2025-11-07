@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { prisma } from '../lib/prisma/prisma';
 import bcrypt from 'bcrypt';
-import { verifyApiOrigin } from '../_inc/functions/originValidation';
+// import { verifyApiOrigin } from '../_inc/functions/originValidation';
 
 const router = Router();
 
@@ -9,10 +9,10 @@ const router = Router();
 router.post('/register', async (req, res) => {
   try {
     // 1️⃣ CORS / anti-CSRF check
-    const origin = req.headers.origin || null;
-    if (!verifyApiOrigin(origin)) {
-      return res.status(403).json({ error: 'not_allowed_origin' });
-    }
+    // const origin = req.headers.origin || null;
+    // if (!verifyApiOrigin(origin)) {
+    //   return res.status(403).json({ error: 'not_allowed_origin' });
+    // }
 
     // 2️⃣ Parse request body
     const { name, email, password } = req.body as {
