@@ -34,6 +34,11 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/", (req, res) => {
+  res.send("🚀 Express backend is running!");
+});
+
+
 // API routes
 app.use('/api/register', registerRouter);
 app.use('/api', loginRouter); 
