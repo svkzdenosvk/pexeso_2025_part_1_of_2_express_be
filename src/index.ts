@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(
   cors({
     // origin: 'http://localhost:4173', // FE adresa
-    origin: 'https://vite-postgres.netlify.app/', // FE adresa
+    origin: 'https://vite-postgres.netlify.app', // FE adresa
     credentials: true, // dôležité pre cookies!
   })
 );
