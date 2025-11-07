@@ -51,11 +51,11 @@ export const verifyClientOrigin = (): boolean => {
  *
  * @param origin - The request origin (or null if not provided).
  * @returns True if the origin is allowed, otherwise false.
- */
-export const verifyApiOrigin = (origin: string | null): boolean => {
-  if (!origin) return false;
+//  */
+// export const verifyApiOrigin = (origin: string | null): boolean => {
+//   if (!origin) return false;
 
-  const isValid = ALLOWED_ORIGINS.includes(origin as AllowedOrigin);
+//   const isValid = ALLOWED_ORIGINS.includes(origin as AllowedOrigin);
 
-  return isValid;
-};
+//   return isValid;
+// };

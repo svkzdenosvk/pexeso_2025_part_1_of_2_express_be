@@ -5,7 +5,6 @@ import {
   verifyLongToken,
   signShortToken,
 } from "../lib/jwt/jwt_helper";
-// import { My_Type_Unique_User } from "@pexeso/_inc/my_types";
 import { isLike_My_Type_User } from "../_inc/functions/general";
 
 const router = Router();
@@ -20,6 +19,8 @@ router.get("/me", async (req, res) => {
       // try {
       const decodedShort: any = verifyShortToken(shortToken);
       if (decodedShort?.id) {
+        console.log("existuje short token");
+
         const user = await prisma.users.findUnique({
           where: { id: decodedShort.id },
           select: { id: true, email: true, name: true },
@@ -33,10 +34,15 @@ router.get("/me", async (req, res) => {
     }
 
     // 🟠 2. Short-term token neplatný → skús long-term
-    if (!longToken) return res.status(401).json({ isLoggedIn: false });
+    if (!longToken) {
+      console.log("neexistuje long token");
+      return res.status(401).json({ isLoggedIn: false });
+    }
 
     const decodedLong = verifyLongToken(longToken);
     if (!decodedLong?.id) {
+      console.log("decoded long token problem with id ");
+
       return res.status(401).json({ isLoggedIn: false });
     }
 
@@ -47,6 +53,8 @@ router.get("/me", async (req, res) => {
     });
 
     if (!user || !isLike_My_Type_User(user)) {
+      console.log("problem s userom po prisme ");
+
       return res.status(401).json({ isLoggedIn: false });
     }
 
@@ -60,10 +68,12 @@ router.get("/me", async (req, res) => {
 
     res.cookie("shortTerm_token", newShortToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      // secure: process.env.NODE_ENV === "production",
+      secure: true,
+      // sameSite: "lax",
+      sameSite: "none",
       path: "/",
-      maxAge: 15 * 60 // 15 minutes in seconds
+      maxAge: 15 * 60, // 15 minutes in seconds
     });
 
     return res.json({ isLoggedIn: true, user });

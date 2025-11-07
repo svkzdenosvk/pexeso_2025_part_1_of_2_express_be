@@ -22,7 +22,7 @@ router.get("/logout", (_req, res) => {
     path: "/", // rovnaké
   });
 
-  console.log("bolo odhlaseny clovek z expresu");
+  console.log("toto je z logout api");
   return res.json({ success: true });
 });
 

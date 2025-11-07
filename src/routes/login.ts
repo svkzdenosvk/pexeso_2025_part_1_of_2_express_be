@@ -40,7 +40,7 @@ router.post('/login', async (req, res) => {
     // 7️⃣ Set cookies (HTTP-only)
     res.cookie('shortTerm_token', shortToken, {
       httpOnly: true,
-        secure: false, // pri localhoste false
+        secure: true, // pri localhoste false
   sameSite: 'none', // <- toto je kľúčové
       // secure: process.env.NODE_ENV === 'production',
       // sameSite: 'lax',
@@ -50,7 +50,7 @@ router.post('/login', async (req, res) => {
 
     res.cookie('longTerm_token', longToken, {
       httpOnly: true,
-        secure: false, // pri localhoste false
+        secure: true, // pri localhoste false
   sameSite: 'none', // <- toto je kľúčové
       // secure: process.env.NODE_ENV === 'production',
       // sameSite: 'lax',
