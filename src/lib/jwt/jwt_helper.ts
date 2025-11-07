@@ -1,6 +1,5 @@
 import jwt /*, { SignOptions }*/ from "jsonwebtoken";
-// import type { My_Type_Unique_User } from "@pexeso/_inc/my_types";
-import type { My_Type_Unique_User } from "@pexeso/_inc/my_types";
+import type { My_Type_Unique_User } from "../../_inc/my_types";
 
 //  * 🔐 JWT Helper Utilities
 //  * ----------------------------------------------------------

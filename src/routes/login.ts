@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { prisma } from '../lib/prisma/prisma';
 import bcrypt from 'bcrypt';
 import { signShortToken, signLongToken } from '../lib/jwt/jwt_helper';
-import { verifyApiOrigin } from '@pexeso/_inc/functions/originValidation';
+// import { verifyApiOrigin } from '@pexeso/_inc/functions/originValidation';
 
 const router = Router();
 
@@ -11,11 +11,11 @@ const router = Router();
 router.post('/login', async (req, res) => {
   try {
     // 1️⃣ CORS / anti-CSRF check
-    const origin = req.headers.origin?? null;
-    if (!verifyApiOrigin(origin)) {
-      console.warn('Blocked origin:', origin);
-      return res.status(403).json({ error: 'not_allowed_origin' });
-    }
+    // const origin = req.headers.origin?? null;
+    // if (!verifyApiOrigin(origin)) {
+    //   console.warn('Blocked origin:', origin);
+    //   return res.status(403).json({ error: 'not_allowed_origin' });
+    // }
 
     // 2️⃣ Parse credentials from body
     const { email, password } = req.body as { email: string; password: string };
@@ -40,16 +40,20 @@ router.post('/login', async (req, res) => {
     // 7️⃣ Set cookies (HTTP-only)
     res.cookie('shortTerm_token', shortToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+        secure: false, // pri localhoste false
+  sameSite: 'none', // <- toto je kľúčové
+      // secure: process.env.NODE_ENV === 'production',
+      // sameSite: 'lax',
       maxAge: 15 * 60 * 1000, // 15 min in ms
       path: '/',
     });
 
     res.cookie('longTerm_token', longToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+        secure: false, // pri localhoste false
+  sameSite: 'none', // <- toto je kľúčové
+      // secure: process.env.NODE_ENV === 'production',
+      // sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
       path: '/',
     });
