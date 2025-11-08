@@ -73,7 +73,7 @@ router.get("/me", async (req, res) => {
       // sameSite: "lax",
       sameSite: "none",
       path: "/",
-      maxAge: 15 * 60, // 15 minutes in seconds
+      maxAge: 15 * 60 * 1000, // 15 minutes in miliseconds
     });
 
     return res.json({ isLoggedIn: true, user });

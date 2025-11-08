@@ -10,15 +10,15 @@ router.get("/logout", (_req, res) => {
 
   res.clearCookie("shortTerm_token", {
     httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? "lax" : "none",
+    secure: true,
+    sameSite:  "none",
     path: "/", // musí byť rovnaké
   });
 
   res.clearCookie("longTerm_token", {
     httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? "lax" : "none",
+    secure: true,
+    sameSite:  "none",
     path: "/", // rovnaké
   });
 
