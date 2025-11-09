@@ -58,6 +58,8 @@ app.use((req, _res, next) => {
   next();
 });
 
-// app.listen(PORT, () => {
-//   console.log(`🚀 Server running on http://localhost:${PORT}`);
-// });
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server beží na https://tvoje-meno.onrender.com`);
+  console.log(`Port: ${PORT}`);
+});
