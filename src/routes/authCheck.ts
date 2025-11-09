@@ -14,7 +14,7 @@ router.get("/me", async (req, res) => {
     const shortToken = req.cookies["shortTerm_token"];
     const longToken = req.cookies["longTerm_token"];
 
-    // 🟢 1. Skús validovať short-term token
+    // Try to validate short-term token
     if (shortToken) {
       // try {
       const decodedShort: any = verifyShortToken(shortToken);
@@ -29,11 +29,10 @@ router.get("/me", async (req, res) => {
           return res.json({ isLoggedIn: true, user });
         }
         // } catch (err) {
-        // token expired → pokračuj nižšie
       }
-    }
+    } // else token expired or not exists
 
-    // 🟠 2. Short-term token neplatný → skús long-term
+    // If short-term toke not exists try long-term token
     if (!longToken) {
       console.log("neexistuje long token");
       return res.status(401).json({ isLoggedIn: false });
@@ -68,9 +67,7 @@ router.get("/me", async (req, res) => {
 
     res.cookie("shortTerm_token", newShortToken, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === "production",
       secure: true,
-      // sameSite: "lax",
       sameSite: "none",
       path: "/",
       maxAge: 15 * 60 * 1000, // 15 minutes in miliseconds

@@ -5,8 +5,8 @@ import bcrypt from 'bcrypt';
 
 const router = Router();
 
-// POST /api/register
-router.post('/register', async (req, res) => {
+// POST /api/registration
+router.post('/registration', async (req, res) => {
   try {
     // 1️⃣ CORS / anti-CSRF check
     // const origin = req.headers.origin || null;

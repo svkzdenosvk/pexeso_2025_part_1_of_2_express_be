@@ -27,13 +27,11 @@ try {
 // ========================================
 
 // ---------- ✅ CORS middleware pre Vite frontend ----------
-
-
 app.use(
   cors({
-    // origin: 'http://localhost:4173', // FE adresa
-    origin: 'https://vite-postgres.netlify.app', // FE adresa
-    credentials: true, // dôležité pre cookies!
+    // origin: 'http://localhost:4173', // FE adress
+    origin: 'https://vite-postgres.netlify.app', // FE adress
+    credentials: true, // important for cookies!
   })
 );
 
@@ -45,14 +43,13 @@ app.get("/", (req, res) => {
   res.send("🚀 Express backend is running!");
 });
 
-
-// API routes
-app.use('/api/register', registerRouter);
+// ---------- API routes ----------
+app.use('/api/registration', registerRouter);
 app.use('/api', loginRouter); 
 app.use('/api', logoutRouter);
 app.use('/api', authCheckRouter);
 
-// ---------- ✅ Debug cookies ----------
+// ---------- Debug cookies ----------
 app.use((req, _res, next) => {
   console.log("Incoming cookies:", req.cookies);
   next();

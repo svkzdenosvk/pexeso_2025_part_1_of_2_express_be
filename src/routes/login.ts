@@ -1,14 +1,14 @@
 // src/routes/auth.ts
-import { Router } from 'express';
-import { prisma } from '../lib/prisma/prisma';
-import bcrypt from 'bcrypt';
-import { signShortToken, signLongToken } from '../lib/jwt/jwt_helper';
+import { Router } from "express";
+import { prisma } from "../lib/prisma/prisma";
+import bcrypt from "bcrypt";
+import { signShortToken, signLongToken } from "../lib/jwt/jwt_helper";
 // import { verifyApiOrigin } from '@pexeso/_inc/functions/originValidation';
 
 const router = Router();
 
 // POST /api/login
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     // 1️⃣ CORS / anti-CSRF check
     // const origin = req.headers.origin?? null;
@@ -22,40 +22,37 @@ router.post('/login', async (req, res) => {
 
     // 3️⃣ Basic validation
     if (!email || !password) {
-      return res.status(400).json({ error: 'missing_credentials' });
+      return res.status(400).json({ error: "missing_credentials" });
     }
 
     // 4️⃣ Find user in PostgreSQL via Prisma
     const user = await prisma.users.findUnique({ where: { email } });
-    if (!user) return res.status(401).json({ error: 'invalid_credentials' });
+    if (!user) return res.status(401).json({ error: "invalid_credentials" });
 
     // 5️⃣ Compare password
     const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) return res.status(401).json({ error: 'invalid_credentials' });
+    if (!validPassword)
+      return res.status(401).json({ error: "invalid_credentials" });
 
     // 6️⃣ Generate JWT tokens
     const shortToken = signShortToken(user.id, user.email);
     const longToken = signLongToken(user.id);
 
     // 7️⃣ Set cookies (HTTP-only)
-    res.cookie('shortTerm_token', shortToken, {
+    res.cookie("shortTerm_token", shortToken, {
       httpOnly: true,
-        secure: true, // pri localhoste false
-  sameSite: 'none', // <- toto je kľúčové
-      // secure: process.env.NODE_ENV === 'production',
-      // sameSite: 'lax',
+      secure: true, // for localhost false
+      sameSite: "none", // <- toto je kľúčové
       maxAge: 15 * 60 * 1000, // 15 min in ms
-      path: '/',
+      path: "/",
     });
 
-    res.cookie('longTerm_token', longToken, {
+    res.cookie("longTerm_token", longToken, {
       httpOnly: true,
-        secure: true, // pri localhoste false
-  sameSite: 'none', // <- toto je kľúčové
-      // secure: process.env.NODE_ENV === 'production',
-      // sameSite: 'lax',
+      secure: true, // for localhost false
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
-      path: '/',
+      path: "/",
     });
 
     // 8️⃣ Return user data
@@ -67,8 +64,8 @@ router.post('/login', async (req, res) => {
       },
     });
   } catch (err) {
-    console.error('Login error:', err);
-    return res.status(500).json({ error: 'unknown_err' });
+    console.error("Login error:", err);
+    return res.status(500).json({ error: "unknown_err" });
   }
 });
 
