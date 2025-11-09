@@ -1,4 +1,5 @@
 import express from "express";
+import type { Express } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import loginRouter from './routes/login';
@@ -6,22 +7,28 @@ import registerRouter from './routes/registration';
 import logoutRouter from './routes/logout';
 import authCheckRouter from './routes/authCheck';
 
-const app = express();
+const app: Express = express();
 // const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+// === TOTO JE NOVÉ – pridaj toto hore ===
+let prisma: any;
+try {
+  const { PrismaClient } = require('@prisma/client');
+  prisma = new PrismaClient();
+  console.log('✅ Prisma connected!');
+} catch (err) {
+  console.error('DATABASE_URL chýba alebo je zlé! Appka padá.');
+  console.error('Nastav env premennú DATABASE_URL na Rendri!');
+  console.error(err);
+  process.exit(1); // <-- toto nám konečne ukáže chybu v logu
+}
+// ========================================
+
 // ---------- ✅ CORS middleware pre Vite frontend ----------
 
-// app.use(
-//   cors({
-//     origin: process.env.NODE_ENV === 'production'
-//       ? 'https://tvojadomena.sk'
-//       : 'http://localhost:5173',
-//     credentials: true,
-//   })
-// );
-// https://vite-postgres.netlify.app/
+
 app.use(
   cors({
     // origin: 'http://localhost:4173', // FE adresa
