@@ -49,9 +49,10 @@ app.use('/api', loginRouter);
 app.use('/api', logoutRouter);
 app.use('/api', authCheckRouter);
 
-app.use('*', (req, res) => {
+app.use((req, res) => {
   res.status(404).json({ error: 'Route not found', path: req.originalUrl });
 });
+
 // ---------- Debug cookies ----------
 // app.use((req, _res, next) => {
 //   console.log("Incoming cookies:", req.cookies);
