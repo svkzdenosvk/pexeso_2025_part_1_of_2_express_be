@@ -44,16 +44,19 @@ app.get("/", (req, res) => {
 });
 
 // ---------- API routes ----------
-app.use('/api/registration', registerRouter);
+app.use('/api', registerRouter);
 app.use('/api', loginRouter); 
 app.use('/api', logoutRouter);
 app.use('/api', authCheckRouter);
 
-// ---------- Debug cookies ----------
-app.use((req, _res, next) => {
-  console.log("Incoming cookies:", req.cookies);
-  next();
+app.use('*', (req, res) => {
+  res.status(404).json({ error: 'Route not found', path: req.originalUrl });
 });
+// ---------- Debug cookies ----------
+// app.use((req, _res, next) => {
+//   console.log("Incoming cookies:", req.cookies);
+//   next();
+// });
 
 const PORT = Number(process.env.PORT) || 3000;
 app.listen(PORT, '0.0.0.0', () => {
