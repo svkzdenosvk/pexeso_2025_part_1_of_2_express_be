@@ -1,27 +1,38 @@
+/**
+ * Logout Route (GET /api/logout)
+ *
+ * Purpose:
+ *   - Log out the currently authenticated user.
+ *   - Clear authentication cookies from the client (short-term and long-term tokens).
+ *
+ * Workflow:
+ *   1. Remove JWT cookies from the response.
+ *   2. Confirm logout success with a JSON response.
+ */
+
 import { Router } from "express";
 
 const router = Router();
 
 // GET /api/logout
 router.get("/logout", (_req, res) => {
-  
-  // Delete cookie "shortTerm_token" and "longTerm_token"
-  const isProd = process.env.NODE_ENV === "production";
+  // 1. Remove authentication cookies
 
   res.clearCookie("shortTerm_token", {
     httpOnly: true,
-    secure: true,
-    sameSite:  "none",
-    path: "/", 
+    secure: true, // set to false for localhost if needed
+    sameSite: "none",
+    path: "/",
   });
 
   res.clearCookie("longTerm_token", {
     httpOnly: true,
-    secure: true,
-    sameSite:  "none",
-    path: "/", 
+    secure: true, // set to false for localhost if needed
+    sameSite: "none",
+    path: "/",
   });
 
+  // 2. Confirm logout success
   return res.json({ success: true });
 });
 

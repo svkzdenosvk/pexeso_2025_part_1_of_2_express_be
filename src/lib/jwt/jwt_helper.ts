@@ -1,25 +1,27 @@
 import jwt /*, { SignOptions }*/ from "jsonwebtoken";
 import type { My_Type_Unique_User } from "../../_inc/my_types";
 
-//  * 🔐 JWT Helper Utilities
-//  * ----------------------------------------------------------
-//  * This module handles creation and verification of JWT tokens
-//  * used for authenticating users in the application.
-//  *
-//  * Functions:
-//  *  • signToken() → Creates a signed JWT for a given user
-//  *  • verifyToken() → Validates and decodes an existing token
-//  *
-//  * Required environment variables:
-//  *  • JWT_SECRET="your_secret_key"
-//  *  • JWT_EXPIRES_IN="7d"   (optional, default 7 days)
-//  *
-//  * Dependencies:
-//  *  • jsonwebtoken
-//  */
+/*
+ * 🔐 JWT Helper Utilities
+ *
+ * This module handles creation and verification of JWT tokens
+ * used for authenticating users in the application.
+ *
+ * Workflow:
+ *   1. Load JWT secrets and expiration times from environment variables.
+ *   2. signShortToken(id, email) → creates a short-lived token for authentication.
+ *   3. signLongToken(id) → creates a long-lived refresh token.
+ *   4. verifyShortToken(token) → verifies and decodes short-lived token.
+ *   5. verifyLongToken(token) → verifies and decodes long-lived token.
+ *
+ * Dependencies:
+ *  • jsonwebtoken
+ */
+
+// Duration strings for JWT expiration
 type MsString = `${number}${"s" | "m" | "h" | "d" | "w" | "y"}`; // napr. 15m, 7d, 2h
 
-// Load environment variables
+// ---------- Load environment variables ----------
 const JWT_SHORT_SECRET = process.env.JWT_SHORT_SECRET!;
 const JWT_LONG_SECRET = process.env.JWT_LONG_SECRET as string;
 const JWT_SHORT_EXPIRES_IN: MsString =
@@ -27,7 +29,9 @@ const JWT_SHORT_EXPIRES_IN: MsString =
 const JWT_LONG_EXPIRES_IN: MsString =
   (process.env.JWT_LONG_EXPIRES_IN as MsString) || "7d";
 
-/** Create short-lived access token */
+// ---------- Token Signers ----------
+
+// Create short-lived access token for a user
 export function signShortToken(id: number, email: string): string {
   const payload: My_Type_Unique_User = { id, email };
 
@@ -36,12 +40,14 @@ export function signShortToken(id: number, email: string): string {
   });
 }
 
-/** Create long-lived refresh token */
+// Create long-lived refresh token for a user
 export function signLongToken(id: number): string {
   return jwt.sign({ id }, JWT_LONG_SECRET, { expiresIn: JWT_LONG_EXPIRES_IN });
 }
 
-/** Verify access token */
+// ---------- Token Verifiers ----------
+
+/** Verify and decode short-lived access token */
 export function verifyShortToken(token: string) {
   try {
     return jwt.verify(token, JWT_SHORT_SECRET) as My_Type_Unique_User;
@@ -50,7 +56,7 @@ export function verifyShortToken(token: string) {
   }
 }
 
-/** Verify refresh token */
+/** Verify and decode long-lived refresh token */
 export function verifyLongToken(token: string) {
   try {
     return jwt.verify(token, JWT_LONG_SECRET) as { id: number };
